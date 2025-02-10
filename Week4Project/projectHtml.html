@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz Game</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        #quiz-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: auto;
+        }
+        #question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        #options button {
+            display: block;
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #options button:hover {
+            background: #e68900;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Quiz Game</h1>
+    <div id="quiz-container">
+        <p id="question"></p>
+        <div id="options"></div>
+        <p id="score">Score: 0</p>
+    </div>
+    
+    <script>
+        const questions = [
+            { question: "What keyword is used to declare a variable?", options: ["var", "let", "const", "All of the above"], answer: "All of the above" },
+            { question: "How do you write a single-line comment in JavaScript?", options: ["// Comment", "<!-- Comment -->", "/* Comment */", "-- Comment"], answer: "// Comment" },
+            { question: "Which symbol is used for addition in JavaScript?", options: ["+", "-", "*", "/"], answer: "+" },
+            { question: "How do you display a message in the console?", options: ["console.log()", "print()", "echo()", "alert()"], answer: "console.log()" },
+            { question: "Which keyword is used to declare a function?", options: ["function", "def", "func", "method"], answer: "function" },
+            { question: "How do you check if two values are equal in JavaScript?", options: ["==", "===", "!=", "!=="], answer: "===" },
+            { question: "What is the correct way to create an array?", options: ["[]", "{}", "()", "<>"], answer: "[]" },
+            { question: "Which method adds an item to an array?", options: ["push()", "add()", "append()", "insert()"], answer: "push()" },
+            { question: "What is the correct syntax for an if statement?", options: ["if (condition) { }", "if condition then { }", "if condition: { }", "if {condition}"], answer: "if (condition) { }" },
+            { question: "How do you get the length of an array?", options: ["array.length", "array.size", "array.count", "array.length()"], answer: "array.length" },
+            { question: "Which loop is used to repeat code a fixed number of times?", options: ["for", "while", "do...while", "repeat"], answer: "for" },
+            { question: "How do you convert a string to a number?", options: ["parseInt()", "toString()", "String()", "charAt()"], answer: "parseInt()" },
+            { question: "Which symbol is used for multiplication?", options: ["*", "/", "-", "x"], answer: "*" },
+            { question: "What does 'typeof' return for a number?", options: ["number", "int", "float", "string"], answer: "number" },
+            { question: "What function is used to display an alert box?", options: ["alert()", "prompt()", "console.log()", "message()"], answer: "alert()" },
+            { question: "How do you create a loop that runs while a condition is true?", options: ["while", "for", "repeat", "if"], answer: "while" },
+            { question: "How do you round a number to the nearest integer?", options: ["Math.round()", "Math.ceil()", "Math.floor()", "Math.random()"], answer: "Math.round()" },
+            { question: "Which operator is used to assign a value to a variable?", options: ["=", "==", "===", "=>"], answer: "=" },
+            { question: "How do you concatenate two strings?", options: ["+", "&", "*", "%"], answer: "+" },
+            { question: "What does NaN stand for?", options: ["Not a Number", "Null and None", "No actual Name", "Negative and Null"], answer: "Not a Number" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            document.getElementById("question").textContent = questions[currentQuestionIndex].question;
+            const optionsElement = document.getElementById("options");
+            optionsElement.innerHTML = "";
+            document.getElementById("score").textContent = `Score: ${score}`;
+            
+            questions[currentQuestionIndex].options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            if (selectedOption === questions[currentQuestionIndex].answer) {
+                alert("Correct!");
+                score++;
+            } else {
+                alert("Wrong! The correct answer was: " + questions[currentQuestionIndex].answer);
+            }
+            
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                alert("Game over! Your final score is: " + score);
+                currentQuestionIndex = 0;
+                score = 0;
+                loadQuestion();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadQuestion);
+    </script>
+</body>
+</html>
