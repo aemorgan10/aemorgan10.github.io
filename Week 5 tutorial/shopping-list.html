@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping list example</title>
+    <style>
+      li {
+        margin-bottom: 10px;
+      }
+
+      li button {
+        font-size: 12px;
+        margin-left: 20px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My shopping list</h1>
+
+    <div>
+      <label for="item">Enter a new item:</label>
+      <input type="text" name="item" id="item">
+      <button id="addItemBtn">Add item</button>
+    </div>
+
+    <ul id="shoppingList">
+    </ul>
+
+    <script>
+      const input = document.getElementById('item');
+      const button = document.getElementById('addItemBtn');
+      const shoppingList = document.getElementById('shoppingList');
+
+      function addItem() {
+        const itemText = input.value.trim();
+        if (itemText === '') return;
+
+        input.value = '';
+
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        const deleteButton = document.createElement('button');
+
+        span.textContent = itemText;
+        deleteButton.textContent = 'Delete';
+
+        li.appendChild(span);
+        li.appendChild(deleteButton);
+        shoppingList.appendChild(li);
+
+        deleteButton.addEventListener('click', function() {
+          shoppingList.removeChild(li);
+        });
+
+        input.focus();
+      }
+
+      button.addEventListener('click', addItem);
+      input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') addItem();
+      });
+    </script>
+  </body>
+</html>
