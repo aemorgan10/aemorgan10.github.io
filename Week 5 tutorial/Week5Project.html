@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Scheduler</title>
+    <style>
+      body {
+        font-family: 'Comic Sans MS', sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        font-size: 36px;
+        background-color: #ffcc00;
+        padding: 20px;
+        width: 100%;
+      }
+
+      .wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .courses-list {
+        flex: 1;
+        margin-right: 20px;
+        background-color: #ffffe6;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      .semesters {
+        flex: 2;
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .box {
+        width: 200px;
+        height: 300px;
+        background-color: #fff;
+        margin: 10px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #aaa;
+        border-radius: 10px;
+      }
+
+      .box h2, .box h3 {
+        text-align: center;
+        font-size: 18px;
+        color: #af2828;
+      }
+
+      .module {
+        margin: 5px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 5px;
+      }
+
+      .module:hover {
+        background-color: #e0e0e0;
+      }
+
+      .module:active {
+        background-color: #d0d0d0;
+      }
+
+      #moduleDetails {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My Course Scheduler</h1>
+
+    <div class="wrapper">
+      <!-- List of Courses -->
+      <div id="availableCourses" class="courses-list" ondrop="dropModule(event)" ondragover="allowDropModule(event)">
+        <h2>Available Courses</h2>
+        <div class="module" id="module1" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(0)">CSCI 485: Machine Learning</div>
+        <div class="module" id="module2" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(1)">CSCI 303: Web Development</div>
+        <div class="module" id="module3" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(2)">CSCI 354: Database Systems</div>
+        <div class="module" id="module4" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(3)">CSCI 380: Cybersecurity</div>
+        <div class="module" id="module5" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(4)">CSCI 425: Mobile App Development</div>
+        <div class="module" id="module6" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(5)">CSCI 341: Computer Networks</div>
+        <div class="module" id="module7" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(6)">CSCI 333: Software Engineering</div>
+        <div class="module" id="module8" draggable="true" ondragstart="dragModule(event)" onclick="showModuleDetails(7)">CSCI 210: Discrete Math for CS</div>
+      </div>
+
+      <!-- Semesters -->
+      <div class="semesters">
+        <div class="box" id="semesterA" ondrop="dropModule(event)" ondragover="allowDropModule(event)">
+          <h3>Semester 1</h3>
+        </div>
+
+        <div class="box" id="semesterB" ondrop="dropModule(event)" ondragover="allowDropModule(event)">
+          <h3>Semester 2</h3>
+        </div>
+
+        <div class="box" id="semesterC" ondrop="dropModule(event)" ondragover="allowDropModule(event)">
+          <h3>Semester 3</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module Details Section -->
+    <div id="moduleDetails"></div>
+
+    <script>
+      // New variable names with the same courses
+      const courseList = [
+        { title: "CSCI 485: Machine Learning", prerequisites: "CSCI 305, CSCI 310" },
+        { title: "CSCI 303: Web Development", prerequisites: "CSCI 210" },
+        { title: "CSCI 354: Database Systems", prerequisites: "CSCI 305" },
+        { title: "CSCI 380: Cybersecurity", prerequisites: "CSCI 225" },
+        { title: "CSCI 425: Mobile App Development", prerequisites: "CSCI 303, CSCI 210" },
+        { title: "CSCI 341: Computer Networks", prerequisites: "CSCI 305" },
+        { title: "CSCI 333: Software Engineering", prerequisites: "CSCI 305, CSCI 210" },
+        { title: "CSCI 210: Discrete Math for CS", prerequisites: "None" }
+      ];
+
+      // Show details of a course when clicked
+      function showModuleDetails(moduleIndex) {
+        const selectedModule = courseList[moduleIndex];
+        const detailsContainer = document.getElementById('moduleDetails');
+        detailsContainer.innerHTML = `<h4>${selectedModule.title}</h4><p>Prerequisites: ${selectedModule.prerequisites}</p>`;
+      }
+
+      // Drag and drop functionality
+      function allowDropModule(ev) {
+        ev.preventDefault();
+      }
+
+      function dragModule(ev) {
+        ev.dataTransfer.setData("moduleId", ev.target.id);
+      }
+
+      function dropModule(ev) {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData("moduleId");
+        const draggedModule = document.getElementById(data);
+        const targetSemester = ev.target;
+
+        // If the target is a semester and not the dragged module itself, we move the module
+        if (targetSemester.classList.contains("box") && !targetSemester.contains(draggedModule)) {
+          targetSemester.appendChild(draggedModule);
+        } else if (targetSemester.id === "availableCourses") {
+          // If dropped back to the courses list, remove the dragged item from the semester
+          const sourceSemester = draggedModule.parentElement;
+          sourceSemester.removeChild(draggedModule);
+          targetSemester.appendChild(draggedModule);
+        }
+      }
+    </script>
+
+  </body>
+</html>
